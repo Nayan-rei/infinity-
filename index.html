@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Smart Subscription Tracker</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+--bg:#020817;
+--panel:#071426;
+--panel2:#0b1729;
+--line:#19304b;
+--text:#f8fafc;
+--muted:#8da0b8;
+--blue:#2f7df6;
+--cyan:#06d6e8;
+--green:#19d47b;
+--purple:#8b5cf6;
+--orange:#f59e0b;
+--red:#ff4d5e;
+}
+
+body{
+margin:0;
+background:radial-gradient(circle at 50% -20%,#102a50 0,#020817 42%);
+color:var(--text);
+font-family:Inter,Segoe UI,Arial,sans-serif;
+}
+
+button,input,select{font:inherit}
+
+.app{
+display:flex;
+min-height:100vh;
+}
+
+.sidebar{
+width:230px;
+flex:none;
+border-right:1px solid #17304a;
+background:linear-gradient(180deg,#020a16,#03101e);
+padding:22px 16px;
+display:flex;
+flex-direction:column;
+}
+
+.brand{
+text-align:center;
+margin-bottom:24px;
+}
+
+.logo{
+width:78px;
+height:58px;
+margin:auto;
+display:grid;
+place-items:center;
+font-size:42px;
+font-weight:900;
+letter-spacing:-10px;
+color:#36e889;
+text-shadow:0 0 18px #0bd9d5;
+}
+
+.brand h2{
+font-size:18px;
+margin:10px 0 0;
+}
+
+.brand h2 span{
+color:#22df8a;
+}
+
+.nav{
+display:grid;
+gap:7px;
+}
+
+.nav button{
+border:0;
+background:transparent;
+color:#b8c7da;
+text-align:left;
+padding:12px;
+border-radius:10px;
+cursor:pointer;
+}
+
+.nav button.active,
+.nav button:hover{
+background:linear-gradient(90deg,#1d4ed8,#3124e8);
+color:white;
+}
+
+.nav i{
+font-style:normal;
+width:28px;
+display:inline-block;
+}
+
+.pro{
+margin-top:auto;
+border:1px solid #193a61;
+background:linear-gradient(160deg,#0b1c35,#071323);
+border-radius:13px;
+padding:15px;
+}
+
+.pro h3{
+margin:0;
+color:#ffca28;
+}
+
+.pro p{
+color:#9eb0c4;
+font-size:12px;
+}
+
+.pro div{
+font-size:12px;
+margin:8px 0;
+color:#b8c7da;
+}
+
+.pro button{
+width:100%;
+border:0;
+border-radius:8px;
+padding:9px;
+color:white;
+background:linear-gradient(90deg,#2563eb,#5533e8);
+cursor:pointer;
+}
+
+.privacy{
+margin-top:15px;
+padding:13px;
+border:1px solid #16405a;
+border-radius:12px;
+font-size:12px;
+color:#9eb0c4;
+}
+
+.privacy strong{
+color:#3ee88c;
+}
+
+.main{
+flex:1;
+min-width:0;
+}
+
+.topbar{
+height:78px;
+border-bottom:1px solid #17304a;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 20px;
+gap:16px;
+}
+
+.welcome{
+font-size:17px;
+font-weight:700;
+}
+
+.welcome small{
+display:block;
+color:#73879f;
+font-size:12px;
+font-weight:400;
+margin-top:4px;
+}
+
+.search{
+width:260px;
+background:#06101f;
+border:1px solid #1c3651;
+border-radius:22px;
+color:white;
+padding:10px 16px;
+outline:0;
+}
+
+.topicons{
+display:flex;
+align-items:center;
+gap:16px;
+}
+
+.bell-btn{
+background:transparent;
+border:0;
+cursor:pointer;
+font-size:18px;
+transition:transform 0.2s;
+padding:4px;
+border-radius:50%;
+}
+
+.bell-btn:hover{
+transform:scale(1.15);
+background:rgba(255,255,255,0.05);
+}
+
+.avatar{
+width:38px;
+height:38px;
+border-radius:50%;
+display:grid;
+place-items:center;
+background:#2f5eea;
+font-weight:700;
+}
+
+.content{
+padding:20px;
+max-width:1250px;
+margin:auto;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:14px;
+}
+
+.card{
+background:linear-gradient(145deg,rgba(8,24,43,.95),rgba(5,15,29,.95));
+border:1px solid #173552;
+border-radius:12px;
+padding:17px;
+min-width:0;
+}
+
+.metric{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+}
+
+.metric .ico{
+width:42px;
+height:42px;
+border-radius:10px;
+display:grid;
+place-items:center;
+font-size:21px;
+}
+
+.blue{
+background:#0b54bc55;
+color:#39a9ff;
+}
+
+.green{
+background:#00a85a33;
+color:#26e48d;
+}
+
+.purple{
+background:#7631c744;
+color:#a98aff;
+}
+
+.orange{
+background:#d77c0835;
+color:#ffbd3c;
+}
+
+.label{
+font-size:10px;
+color:#8ea2ba;
+letter-spacing:.5px;
+}
+
+.value{
+font-size:25px;
+font-weight:800;
+margin-top:8px;
+}
+
+.delta{
+font-size:10px;
+color:#23dc87;
+margin-top:7px;
+}
+
+.redtxt{
+color:#ff4e64;
+}
+
+.grid2{
+display:grid;
+grid-template-columns:1.35fr .85fr;
+gap:14px;
+margin-top:14px;
+}
+
+.panel{
+background:linear-gradient(145deg,#061426,#071221);
+border:1px solid #173552;
+border-radius:12px;
+padding:17px;
+}
+
+.panelhead{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:12px;
+}
+
+.panel h3{
+margin:0;
+font-size:16px;
+}
+
+.select{
+background:#09182a;
+border:1px solid #203b57;
+color:#b8c7da;
+border-radius:7px;
+padding:7px 10px;
+font-size:11px;
+}
+
+.linechart{
+height:190px;
+position:relative;
+padding:10px 8px 24px;
+}
+
+.gridline{
+position:absolute;
+left:40px;
+right:5px;
+border-top:1px solid #15304a;
+}
+
+.g1{top:22px}
+.g2{top:64px}
+.g3{top:106px}
+.g4{top:148px}
+
+.chartsvg{
+width:100%;
+height:100%;
+}
+
+.months{
+position:absolute;
+left:43px;
+right:5px;
+bottom:0;
+display:flex;
+justify-content:space-between;
+color:#6e849e;
+font-size:10px;
+}
+
+.donutbox{
+display:flex;
+align-items:center;
+gap:20px;
+}
+
+.donut{
+width:170px;
+height:170px;
+border-radius:50%;
+background:
+conic-gradient(
+#8b5cf6 0 43%,
+#2585e8 43% 63%,
+#20c997 63% 78%,
+#f5a900 78% 88%,
+#8b91b8 88%
+);
+position:relative;
+flex:none;
+}
+
+.donut:after{
+content:"";
+position:absolute;
+inset:37px;
+background:#071426;
+border-radius:50%;
+}
+
+.donutcenter{
+position:absolute;
+z-index:2;
+inset:0;
+display:grid;
+place-items:center;
+text-align:center;
+font-size:12px;
+color:#91a3b8;
+}
+
+.donutcenter b{
+display:block;
+color:white;
+font-size:18px;
+}
+
+.legend{
+display:grid;
+gap:10px;
+width:100%;
+font-size:11px;
+color:#aebdd0;
+}
+
+.legend span{
+display:flex;
+justify-content:space-between;
+}
+
+.dot{
+width:9px;
+height:9px;
+border-radius:50%;
+display:inline-block;
+margin-right:6px;
+}
+
+.subgrid{
+display:grid;
+grid-template-columns:1.5fr .7fr;
+gap:14px;
+margin-top:14px;
+}
+
+.tablehead{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+}
+
+.filters{
+display:flex;
+gap:7px;
+}
+
+.filters select{
+background:#081729;
+border:1px solid #203b57;
+color:#aebdd0;
+border-radius:7px;
+padding:7px;
+font-size:10px;
+}
+
+.add{
+background:linear-gradient(90deg,#147cff,#3c72f4);
+border:0;
+color:#fff;
+border-radius:7px;
+padding:8px 12px;
+cursor:pointer;
+font-size:11px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:13px;
+font-size:11px;
+}
+
+th{
+color:#70869e;
+font-weight:500;
+text-align:left;
+padding:9px;
+border-bottom:1px solid #17304a;
+}
+
+td{
+padding:10px 9px;
+border-bottom:1px solid #11283e;
+color:#c8d3df;
+}
+
+.service{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.serviceicon{
+width:24px;
+height:24px;
+border-radius:6px;
+background:#142b46;
+display:grid;
+place-items:center;
+font-size:12px;
+}
+
+.status{
+padding:4px 7px;
+border-radius:10px;
+font-size:9px;
+}
+
+.on{
+color:#26e48d;
+background:#073a2b;
+}
+
+.off{
+color:#ff6071;
+background:#401823;
+}
+
+.act{
+border:0;
+background:transparent;
+color:#48a4ff;
+cursor:pointer;
+padding:2px 4px;
+font-size:12px;
+}
+
+.health{
+display:flex;
+align-items:center;
+gap:18px;
+}
+
+.score{
+width:125px;
+height:125px;
+border-radius:50%;
+background:
+conic-gradient(
+#19d47b 0 78%,
+#203448 78%
+);
+position:relative;
+display:grid;
+place-items:center;
+}
+
+.score:after{
+content:"";
+position:absolute;
+inset:12px;
+border-radius:50%;
+background:#071426;
+}
+
+.score span{
+position:relative;
+z-index:2;
+font-size:29px;
+font-weight:800;
+}
+
+.muted{
+color:#8194aa;
+font-size:11px;
+line-height:1.5;
+}
+
+.upcoming{
+display:grid;
+gap:12px;
+}
+
+.pay{
+display:flex;
+justify-content:space-between;
+align-items:center;
+color:#c5d0dc;
+font-size:11px;
+}
+
+.pay strong{
+display:block;
+color:#dce6f0;
+}
+
+.today{
+color:#ff5d6c;
+font-weight:bold;
+}
+
+.soon{
+color:#f6b632;
+font-weight:bold;
+}
+
+.bottom{
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+gap:14px;
+margin-top:14px;
+}
+
+.advisor ul{
+padding-left:17px;
+color:#aebdd0;
+font-size:11px;
+line-height:1.8;
+}
+
+.budgetrow{
+display:flex;
+justify-content:space-between;
+color:#93a6bb;
+font-size:11px;
+}
+
+.budgetrow b{
+color:#fff;
+font-size:18px;
+}
+
+.progress{
+height:12px;
+background:#172d44;
+border-radius:10px;
+overflow:hidden;
+margin:13px 0;
+}
+
+.progress span{
+display:block;
+height:100%;
+width:79.6%;
+background:linear-gradient(90deg,#1ee28a,#4cd95f);
+border-radius:10px;
+}
+
+.quick{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+}
+
+.quick button{
+border:1px solid #1c4561;
+background:#081a2b;
+color:#b8c7d8;
+border-radius:9px;
+padding:13px 5px;
+cursor:pointer;
+font-size:10px;
+}
+
+.quick button:hover{
+border-color:#3c91ff;
+}
+
+.quick b{
+display:block;
+font-size:20px;
+margin-bottom:6px;
+}
+
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:#000b;
+z-index:10;
+place-items:center;
+padding:20px;
+}
+
+.modalbox{
+width:min(520px,100%);
+background:#081426;
+border:1px solid #234362;
+border-radius:14px;
+padding:20px;
+}
+
+.modalbox input,
+.modalbox select{
+width:100%;
+padding:11px;
+margin:5px 0;
+background:#0b1b2e;
+border:1px solid #24425f;
+color:#fff;
+border-radius:8px;
+}
+
+.modalbox button{
+border:0;
+padding:10px 14px;
+border-radius:8px;
+background:#2563eb;
+color:#fff;
+cursor:pointer;
+margin-top:8px;
+}
+
+.close{
+background:#334155!important;
+}
+
+.toast{
+position:fixed;
+right:20px;
+bottom:20px;
+background:#10233a;
+border:1px solid #285276;
+padding:12px 16px;
+border-radius:10px;
+display:none;
+z-index:20;
+}
+
+/* CALENDAR STYLES */
+.calendar-grid {
+display: grid;
+grid-template-columns: repeat(7, 1fr);
+gap: 6px;
+margin-top: 15px;
+}
+
+.calendar-day-header {
+text-align: center;
+font-weight: 700;
+font-size: 11px;
+color: var(--muted);
+padding: 4px;
+}
+
+.calendar-cell {
+background: var(--panel2);
+border: 1px solid var(--line);
+border-radius: 6px;
+min-height: 65px;
+padding: 4px;
+font-size: 11px;
+display: flex;
+flex-direction: column;
+}
+
+.calendar-cell.empty {
+background: transparent;
+border-color: transparent;
+}
+
+.calendar-cell .day-number {
+font-weight: 700;
+color: var(--muted);
+margin-bottom: 2px;
+}
+
+.calendar-cell .day-number.today-num {
+color: var(--cyan);
+}
+
+.cal-event-badge {
+background: var(--blue);
+color: #fff;
+font-size: 9px;
+padding: 2px 4px;
+border-radius: 4px;
+margin-top: 2px;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+@media(max-width:1050px){
+.sidebar{ width:190px; }
+.cards{ grid-template-columns:repeat(2,1fr); }
+.grid2, .subgrid{ grid-template-columns:1fr; }
+.bottom{ grid-template-columns:1fr; }
+}
+
+@media(max-width:700px){
+.sidebar{ display:none; }
+.topbar{ height:auto; padding:15px; flex-wrap:wrap; }
+.search{ width:100%; order:3; }
+.content{ padding:12px; }
+.cards{ grid-template-columns:1fr; }
+.donutbox{ flex-direction:column; }
+.quick{ grid-template-columns:repeat(2,1fr); }
+table{ min-width:850px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar">
+
+<div class="brand">
+<div class="logo">₹∞</div>
+<h2>
+Smart Subscription<br>
+<span>Tracker</span>
+</h2>
+</div>
+
+<nav class="nav">
+<button class="active"><i>⌂</i>Dashboard</button>
+<button onclick="scrollToSection('subs')"><i>▱</i>Subscriptions</button>
+<button onclick="scrollToSection('analytics')"><i>▥</i>Analytics</button>
+<button onclick="openCalendar()"><i>□</i>Calendar</button>
+<button onclick="scrollToSection('budgetPanel')"><i>▤</i>Budget</button>
+<button onclick="scrollToSection('advisor')"><i>♙</i>AI Advisor</button>
+<button onclick="exportCSV()"><i>▧</i>Reports</button>
+<button onclick="backupData()"><i>⚙</i>Settings</button>
+<button onclick="document.getElementById('restoreFile').click()"><i>☁</i>Backup & Restore</button>
+</nav>
+
+<div class="pro">
+<h3>♛ Upgrade to PRO</h3>
+<p>Unlock the complete subscription intelligence experience.</p>
+<div>✓ Unlimited Subscriptions</div>
+<div>✓ Advanced Analytics</div>
+<div>✓ Cloud Backup</div>
+<div>✓ Priority Support</div>
+<button onclick="showToast('PRO upgrade panel opened 🚀')">Upgrade Now</button>
+</div>
+
+<div class="privacy">
+🛡️ <strong>Data is Local & Private</strong><br><br>
+Your data is stored only in this browser.<br><br>
+<strong>✓ 100% Secure</strong>
+</div>
+
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+<div class="welcome">
+Welcome back, User! 👋
+<small>Here's what's happening with your subscriptions today.</small>
+</div>
+
+<input class="search" id="globalSearch" placeholder="Search subscriptions... 🔍" oninput="renderTable()">
+
+<div class="topicons">
+<button class="bell-btn" id="notifBtn" onclick="requestNotificationPermission()" title="Enable Due Date Notifications">🔔</button>
+<div class="avatar">U</div>
+</div>
+</header>
+
+<section class="content">
+
+<!-- KPI CARDS -->
+<div class="cards">
+<div class="card">
+<div class="metric">
+<div>
+<div class="label">MONTHLY SPENDING</div>
+<div class="value" id="monthly">₹0</div>
+<div class="delta">↗ Recurring expenses</div>
+</div>
+<div class="ico blue">▣</div>
+</div>
+</div>
+
+<div class="card">
+<div class="metric">
+<div>
+<div class="label">YEARLY FORECAST</div>
+<div class="value" id="yearly">₹0</div>
+<div class="delta">↗ Annual projection</div>
+</div>
+<div class="ico green">▣</div>
+</div>
+</div>
+
+<div class="card">
+<div class="metric">
+<div>
+<div class="label">ACTIVE PLANS</div>
+<div class="value" id="active">0</div>
+<div class="delta redtxt">Live subscriptions</div>
+</div>
+<div class="ico purple">▰</div>
+</div>
+</div>
+
+<div class="card">
+<div class="metric">
+<div>
+<div class="label">POTENTIAL SAVINGS</div>
+<div class="value" id="savings">₹0</div>
+<div class="delta">Yearly savings</div>
+</div>
+<div class="ico orange">●</div>
+</div>
+</div>
+</div>
+
+<!-- ANALYTICS -->
+<div class="grid2" id="analytics">
+<div class="panel">
+<div class="panelhead">
+<h3>Monthly Spending Overview</h3>
+<select class="select"><option>This Year</option></select>
+</div>
+
+<div class="linechart">
+<div class="gridline g1"></div>
+<div class="gridline g2"></div>
+<div class="gridline g3"></div>
+<div class="gridline g4"></div>
+
+<svg class="chartsvg" viewBox="0 0 700 180" preserveAspectRatio="none">
+<defs>
+<linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#2f7df6" stop-opacity=".35"/>
+<stop offset="1" stop-color="#2f7df6" stop-opacity="0"/>
+</linearGradient>
+</defs>
+<path d="M10 145 C70 100 80 125 120 130 S170 105 210 85 S260 110 300 75 S340 115 380 65 S430 90 470 62 S510 78 550 55 S610 85 690 40 L690 180 L10 180Z" fill="url(#area)"/>
+<path d="M10 145 C70 100 80 125 120 130 S170 105 210 85 S260 110 300 75 S340 115 380 65 S430 90 470 62 S510 78 550 55 S610 85 690 40" fill="none" stroke="#3488ff" stroke-width="3"/>
+</svg>
+
+<div class="months">
+<span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+</div>
+</div>
+</div>
+
+<!-- DONUT -->
+<div class="panel">
+<div class="panelhead">
+<h3>Spending by Category</h3>
+<select class="select"><option>This Month</option></select>
+</div>
+
+<div class="donutbox">
+<div class="donut">
+<div class="donutcenter">
+<div>Total<b id="donutTotal">₹0</b></div>
+</div>
+</div>
+
+<div class="legend">
+<span><label><i class="dot" style="background:#8b5cf6"></i>Entertainment</label><b>43%</b></span>
+<span><label><i class="dot" style="background:#2585e8"></i>Cloud</label><b>20%</b></span>
+<span><label><i class="dot" style="background:#20c997"></i>Software</label><b>15%</b></span>
+<span><label><i class="dot" style="background:#f5a900"></i>Fitness</label><b>10%</b></span>
+<span><label><i class="dot" style="background:#8b91b8"></i>Other</label><b>10%</b></span>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SUBSCRIPTIONS -->
+<div class="subgrid" id="subs">
+<div class="panel">
+<div class="tablehead">
+<h3>Your Subscriptions</h3>
+<div class="filters">
+<select id="catFilter" onchange="renderTable()">
+<option>All Categories</option>
+<option>Entertainment</option>
+<option>Cloud</option>
+<option>Software</option>
+<option>Fitness</option>
+<option>Education</option>
+<option>Other</option>
+</select>
+
+<select id="statusFilter" onchange="renderTable()">
+<option>All Status</option>
+<option>Active</option>
+<option>Cancelled</option>
+</select>
+
+<button class="add" onclick="openForm()">+ Add Subscription</button>
+</div>
+</div>
+
+<div style="overflow-x:auto">
+<table>
+<thead>
+<tr>
+<th>SUBSCRIPTION</th>
+<th>CATEGORY</th>
+<th>FREQUENCY</th>
+<th>MONTHLY COST</th>
+<th>NEXT PAYMENT</th>
+<th>STATUS</th>
+<th>ACTION</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+</div>
+</div>
+
+<!-- HEALTH -->
+<div class="panel">
+<h3>Subscription Health Score</h3>
+<div class="health">
+<div class="score"><span id="health">78</span></div>
+<div>
+<strong>You're doing great! 🎉</strong>
+<p class="muted">Keep reviewing unused subscriptions to improve your score.</p>
+<button class="add" onclick="runAdvisor()">View Tips</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- PAYMENTS -->
+<div class="subgrid" id="payments">
+<div class="panel">
+<h3>Upcoming Payments</h3>
+<div class="upcoming" id="paymentsList"></div>
+<button class="add" onclick="openCalendar()">View Calendar</button>
+</div>
+
+<!-- BUDGET -->
+<div class="panel" id="budgetPanel">
+<h3>Budget Overview</h3>
+<div class="budgetrow"><span>Monthly Budget</span><b id="budget">₹3,000</b></div>
+<div class="budgetrow"><span>Used</span><b id="used">₹0</b></div>
+<div class="progress"><span id="budgetFill"></span></div>
+<div class="budgetrow">
+<span id="budgetUsage">0% of budget used</span>
+<b id="left">₹3,000 left</b>
+</div>
+<button class="add" onclick="editBudget()">Edit Budget</button>
+</div>
+</div>
+
+<!-- BOTTOM -->
+<div class="bottom">
+
+<!-- AI ADVISOR -->
+<div class="panel advisor" id="advisor">
+<h3>♙ AI Advisor Insights</h3>
+<p class="muted">Based on your spending patterns</p>
+<ul id="advisorList"></ul>
+<button class="add" onclick="runAdvisor()">Analyze Again</button>
+</div>
+
+<!-- BUDGET SETUP -->
+<div class="panel">
+<h3>Budget Quick Setup</h3>
+<p class="muted">Set your monthly recurring-expense limit.</p>
+<input id="budgetInput" type="number" placeholder="₹ Monthly Budget" style="width:100%;padding:10px;background:#09182a;color:white;border:1px solid #203b57;border-radius:8px;">
+<button class="add" onclick="saveBudget()">Save Budget</button>
+</div>
+
+<!-- QUICK ACTIONS -->
+<div class="panel">
+<h3>Quick Actions</h3>
+<div class="quick">
+<button onclick="exportCSV()"><b>▤</b>Export CSV</button>
+<button onclick="backupData()"><b>☁</b>Backup Data</button>
+<button onclick="document.getElementById('restoreFile').click()"><b>♧</b>Restore Data</button>
+<button onclick="clearAll()"><b>♜</b>Clear All</button>
+</div>
+</div>
+
+</div>
+
+<input type="file" id="restoreFile" accept=".json" hidden onchange="restoreData(event)">
+
+</section>
+</main>
+</div>
+
+<!-- ADD / EDIT MODAL -->
+<div class="modal" id="modal">
+<div class="modalbox">
+<h2 id="modalTitle">Add Subscription</h2>
+<input id="fName" placeholder="Subscription name">
+<input id="fCost" type="number" placeholder="Monthly cost ₹">
+<select id="fCat">
+<option>Entertainment</option>
+<option>Cloud</option>
+<option>Software</option>
+<option>Fitness</option>
+<option>Education</option>
+<option>Other</option>
+</select>
+<select id="fFreq">
+<option>Monthly</option>
+<option>Yearly</option>
+</select>
+<input id="fDate" type="date">
+<select id="fStatus">
+<option>Active</option>
+<option>Cancelled</option>
+</select>
+<button onclick="saveSubscription()">Save Subscription</button>
+<button class="close" onclick="closeForm()">Close</button>
+</div>
+</div>
+
+<!-- CALENDAR MODAL -->
+<div class="modal" id="calendarModal">
+  <div class="modalbox" style="width:min(650px,100%);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <h2 id="calendarMonthLabel" style="margin:0;">Calendar</h2>
+      <div>
+        <button onclick="changeCalendarMonth(-1)">◄ Prev</button>
+        <button onclick="changeCalendarMonth(1)">Next ►</button>
+      </div>
+    </div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+    <div style="margin-top:15px; text-align:right;">
+      <button class="close" onclick="closeCalendar()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+/* =========================
+DATA
+========================= */
+
+let data = JSON.parse(localStorage.getItem("smartTrackerData") || "null") || [
+{name:"Netflix",category:"Entertainment",frequency:"Monthly",cost:649,date:"2026-08-25",status:"Active",icon:"N",paymentHistory:[]},
+{name:"Spotify",category:"Entertainment",frequency:"Monthly",cost:119,date:"2026-08-28",status:"Active",icon:"S",paymentHistory:[]},
+{name:"Amazon Prime",category:"Entertainment",frequency:"Monthly",cost:859,date:"2026-08-30",status:"Active",icon:"P",paymentHistory:[]},
+{name:"Google Drive",category:"Cloud",frequency:"Monthly",cost:130,date:"2026-09-02",status:"Active",icon:"G",paymentHistory:[]},
+{name:"Adobe CC",category:"Software",frequency:"Monthly",cost:1675,date:"2026-09-05",status:"Active",icon:"A",paymentHistory:[]},
+{name:"Gym Membership",category:"Fitness",frequency:"Monthly",cost:599,date:"2026-09-10",status:"Active",icon:"G",paymentHistory:[]},
+{name:"Coursera",category:"Education",frequency:"Yearly",cost:1299,date:"2026-10-15",status:"Active",icon:"C",paymentHistory:[]},
+{name:"Disney+ Hotstar",category:"Entertainment",frequency:"Monthly",cost:299,date:"2026-08-18",status:"Cancelled",icon:"D",paymentHistory:[]},
+{name:"Skillshare",category:"Education",frequency:"Yearly",cost:1029,date:"2026-08-22",status:"Cancelled",icon:"S",paymentHistory:[]}
+];
+
+let editIndex = -1;
+let currentCalDate = new Date();
+
+/* =========================
+SAVE & HELPERS
+========================= */
+
+function save(){
+localStorage.setItem("smartTrackerData", JSON.stringify(data));
+}
+
+function money(n){
+return "₹" + Number(n).toLocaleString("en-IN");
+}
+
+function showToast(text){
+let toast = document.getElementById("toast");
+toast.textContent = text;
+toast.style.display = "block";
+setTimeout(() => { toast.style.display = "none"; }, 2200);
+}
+
+/* =========================
+NOTIFICATION ENGINE
+========================= */
+
+function requestNotificationPermission() {
+  if (!("Notification" in window)) {
+    alert("This browser does not support desktop notifications.");
+    return;
+  }
+
+  Notification.requestPermission().then(permission => {
+    if (permission === "granted") {
+      showToast("Notifications enabled! 🔔");
+      checkAndSendNotifications();
+    } else {
+      showToast("Notification permission denied.");
+    }
+  });
+}
+
+function checkAndSendNotifications() {
+  if (!("Notification" in window) || Notification.permission !== "granted") return;
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  data.forEach(sub => {
+    if (sub.status === "Active" && sub.date) {
+      const dueDate = new Date(sub.date);
+      dueDate.setHours(0,0,0,0);
+      const diffTime = dueDate - today;
+      const daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      if (daysRemaining === 0) {
+        new Notification(`Payment Due Today! ⚠️`, {
+          body: `Your ${sub.name} subscription (${money(sub.cost)}) is due today.`,
+          icon: "🔔"
+        });
+      } else if (daysRemaining > 0 && daysRemaining <= 3) {
+        new Notification(`Upcoming Renewal Alert 📅`, {
+          body: `${sub.name} renews in ${daysRemaining} day(s) (${money(sub.cost)}).`,
+          icon: "🔔"
+        });
+      }
+    }
+  });
+}
+
+/* =========================
+FORM MODAL
+========================= */
+
+function openForm(index = -1){
+editIndex = index;
+document.getElementById("modal").style.display = "grid";
+
+if(index >= 0){
+let s = data[index];
+fName.value = s.name;
+fCost.value = s.cost;
+fCat.value = s.category;
+fFreq.value = s.frequency;
+fDate.value = s.date;
+fStatus.value = s.status;
+modalTitle.textContent = "Edit Subscription";
+} else {
+fName.value = "";
+fCost.value = "";
+fDate.value = "";
+fCat.value = "Entertainment";
+fFreq.value = "Monthly";
+fStatus.value = "Active";
+modalTitle.textContent = "Add Subscription";
+}
+}
+
+function closeForm(){
+document.getElementById("modal").style.display = "none";
+}
+
+function saveSubscription(){
+let s = {
+name: fName.value.trim(),
+cost: Number(fCost.value),
+category: fCat.value,
+frequency: fFreq.value,
+date: fDate.value,
+status: fStatus.value,
+icon: fName.value.trim().charAt(0).toUpperCase(),
+paymentHistory: editIndex >= 0 && data[editIndex].paymentHistory ? data[editIndex].paymentHistory : []
+};
+
+if(!s.name || s.cost <= 0){
+alert("Enter valid subscription details.");
+return;
+}
+
+if(editIndex < 0){
+data.push(s);
+} else {
+data[editIndex] = s;
+}
+
+save();
+closeForm();
+renderTable();
+checkAndSendNotifications();
+showToast("Subscription saved ✅");
+}
+
+/* =========================
+DISPLAY TABLE
+========================= */
+
+function renderTable(){
+let query = document.getElementById("globalSearch").value.toLowerCase();
+let category = document.getElementById("catFilter").value;
+let status = document.getElementById("statusFilter").value;
+
+let list = data.map((x,i) => ({...x,i})).filter(x => {
+let nameMatch = x.name.toLowerCase().includes(query);
+let categoryMatch = category === "All Categories" || x.category === category;
+let statusMatch = status === "All Status" || x.status === status;
+return nameMatch && categoryMatch && statusMatch;
+});
+
+let table = document.getElementById("tableBody");
+
+if(!list.length){
+table.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:30px">No subscriptions found.</td></tr>`;
+} else {
+table.innerHTML = list.map(s => `
+<tr>
+<td>
+<div class="service">
+<span class="serviceicon">${escapeHTML(s.icon)}</span>
+<strong>${escapeHTML(s.name)}</strong>
+</div>
+</td>
+<td>${escapeHTML(s.category)}</td>
+<td>${s.frequency}</td>
+<td>${money(s.cost)}</td>
+<td>${s.date || "Not set"}</td>
+<td><span class="status ${s.status === "Active" ? "on" : "off"}">${s.status}</span></td>
+<td>
+<button class="act" onclick="renewSubscription(${s.i})" title="Renew Subscription">🔄</button>
+<button class="act" onclick="viewHistory(${s.i})" title="Payment History">📜</button>
+<button class="act" onclick="openForm(${s.i})" title="Edit">✎</button>
+<button class="act" onclick="deleteSubscription(${s.i})" title="Delete">🗑</button>
+</td>
+</tr>
+`).join("");
+}
+
+updateStats();
+renderPayments();
+}
+
+/* =========================
+DASHBOARD & STATS
+========================= */
+
+function updateStats(){
+let active = data.filter(x => x.status === "Active");
+let monthly = active.reduce((sum,x) => sum + Number(x.cost), 0);
+let yearly = monthly * 12;
+let cancelled = data.filter(x => x.status === "Cancelled").reduce((sum,x) => sum + Number(x.cost)*12, 0);
+
+document.getElementById("monthly").textContent = money(monthly);
+document.getElementById("yearly").textContent = money(yearly);
+document.getElementById("active").textContent = active.length;
+document.getElementById("savings").textContent = money(cancelled);
+document.getElementById("donutTotal").textContent = money(monthly);
+
+let budgetValue = Number(localStorage.getItem("trackerBudget") || 3000);
+let percentage = budgetValue ? (monthly / budgetValue) * 100 : 0;
+
+document.getElementById("budget").textContent = money(budgetValue);
+document.getElementById("used").textContent = money(monthly);
+document.getElementById("budgetFill").style.width = Math.min(percentage, 100) + "%";
+document.getElementById("budgetUsage").textContent = percentage.toFixed(1) + "% of budget used";
+document.getElementById("left").textContent = money(Math.max(0, budgetValue - monthly)) + " left";
+
+let score = Math.max(40, 100 - (active.length > 8 ? 12 : 0) - (monthly > 3000 ? 10 : 0));
+document.getElementById("health").textContent = score;
+}
+
+/* =========================
+UPCOMING PAYMENTS
+========================= */
+
+function renderPayments(){
+let today = new Date();
+today.setHours(0,0,0,0);
+
+let list = data.filter(x => x.status === "Active" && x.date).map(x => ({
+...x,
+days: Math.ceil((new Date(x.date) - today) / 86400000)
+})).filter(x => x.days >= 0).sort((a,b) => a.days - b.days).slice(0, 5);
+
+let container = document.getElementById("paymentsList");
+
+if(!list.length){
+container.innerHTML = "<div class='muted'>No upcoming payments.</div>";
+return;
+}
+
+container.innerHTML = list.map(x => `
+<div class="pay">
+<div>
+<strong>▣ ${escapeHTML(x.name)}</strong>
+<span class="muted">${x.date}</span>
+</div>
+<span class="${x.days === 0 ? 'today' : x.days <= 3 ? 'soon' : ''}">
+${x.days === 0 ? "Today" : "in " + x.days + " days"}
+</span>
+</div>
+`).join("");
+}
+
+/* =========================
+CALENDAR LOGIC
+========================= */
+
+function openCalendar() {
+document.getElementById("calendarModal").style.display = "grid";
+renderCalendarGrid();
+}
+
+function closeCalendar() {
+document.getElementById("calendarModal").style.display = "none";
+}
+
+function changeCalendarMonth(offset) {
+currentCalDate.setMonth(currentCalDate.getMonth() + offset);
+renderCalendarGrid();
+}
+
+function renderCalendarGrid() {
+const grid = document.getElementById("calendarGrid");
+const monthLabel = document.getElementById("calendarMonthLabel");
+if (!grid || !monthLabel) return;
+
+grid.innerHTML = "";
+
+const year = currentCalDate.getFullYear();
+const month = currentCalDate.getMonth();
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+monthLabel.textContent = `${monthNames[month]} ${year}`;
+
+dayNames.forEach(d => {
+const header = document.createElement("div");
+header.className = "calendar-day-header";
+header.textContent = d;
+grid.appendChild(header);
+});
+
+const firstDay = new Date(year, month, 1).getDay();
+const totalDays = new Date(year, month + 1, 0).getDate();
+
+for (let i = 0; i < firstDay; i++) {
+const emptyCell = document.createElement("div");
+emptyCell.className = "calendar-cell empty";
+grid.appendChild(emptyCell);
+}
+
+const todayStr = new Date().toISOString().split("T")[0];
+
+for (let day = 1; day <= totalDays; day++) {
+const cell = document.createElement("div");
+cell.className = "calendar-cell";
+
+const dateFormatted = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+const numSpan = document.createElement("span");
+numSpan.className = `day-number ${dateFormatted === todayStr ? 'today-num' : ''}`;
+numSpan.textContent = day;
+cell.appendChild(numSpan);
+
+const events = data.filter(sub => sub.status === "Active" && sub.date === dateFormatted);
+events.forEach(sub => {
+const badge = document.createElement("div");
+badge.className = "cal-event-badge";
+badge.textContent = `${sub.name} (${money(sub.cost)})`;
+cell.appendChild(badge);
+});
+
+grid.appendChild(cell);
+}
+}
+
+/* =========================
+RENEWAL & PAYMENT HISTORY
+========================= */
+
+function renewSubscription(index) {
+let sub = data[index];
+let currentDate = sub.date ? new Date(sub.date) : new Date();
+
+if (!sub.paymentHistory) {
+sub.paymentHistory = [];
+}
+
+sub.paymentHistory.push({
+paidDate: new Date().toISOString().split("T")[0],
+amount: sub.cost,
+frequency: sub.frequency
+});
+
+if (sub.frequency === "Yearly") {
+currentDate.setFullYear(currentDate.getFullYear() + 1);
+} else {
+currentDate.setMonth(currentDate.getMonth() + 1);
+}
+
+sub.date = currentDate.toISOString().split("T")[0];
+sub.status = "Active";
+
+save();
+renderTable();
+checkAndSendNotifications();
+showToast(`${sub.name} renewed! Next payment: ${sub.date} 🔄`);
+}
+
+function viewHistory(index) {
+let sub = data[index];
+let history = sub.paymentHistory || [];
+
+if (history.length === 0) {
+alert(`No payment records found for ${sub.name}.`);
+return;
+}
+
+let historyText = history
+.map((p, i) => `${i + 1}. Date: ${p.paidDate} | Amount: ${money(p.amount)} (${p.frequency})`)
+.join("\n");
+
+alert(`Payment History for ${sub.name}:\n\n${historyText}`);
+}
+
+/* =========================
+DELETE & UTILITIES
+========================= */
+
+function deleteSubscription(index){
+if(confirm("Delete this subscription?")){
+data.splice(index, 1);
+save();
+renderTable();
+showToast("Subscription deleted 🗑️");
+}
+}
+
+function exportCSV(){
+let csv = "Subscription,Category,Frequency,Monthly Cost,Yearly Cost,Next Payment,Status\n";
+data.forEach(x => {
+csv += `"${x.name.replace(/"/g,'""')}","${x.category}","${x.frequency}","${x.cost}","${x.cost*12}","${x.date}","${x.status}"\n`;
+});
+download(csv, "subscription-report.csv", "text/csv");
+showToast("CSV exported 📥");
+}
+
+function download(text, filename, type){
+let link = document.createElement("a");
+let url = URL.createObjectURL(new Blob([text], {type: type}));
+link.href = url;
+link.download = filename;
+link.click();
+setTimeout(() => { URL.revokeObjectURL(url); }, 500);
+}
+
+function backupData(){
+download(JSON.stringify({version: "1.0", data: data}, null, 2), "subscription-backup.json", "application/json");
+showToast("Backup created 💾");
+}
+
+function restoreData(event){
+let file = event.target.files[0];
+if(!file) return;
+let reader = new FileReader();
+reader.onload = function(){
+try {
+let result = JSON.parse(reader.result);
+data = result.data || result;
+if(!Array.isArray(data)) throw new Error();
+save();
+renderTable();
+checkAndSendNotifications();
+showToast("Backup restored 📤");
+} catch {
+alert("Invalid backup file.");
+}
+};
+reader.readAsText(file);
+}
+
+function clearAll(){
+if(confirm("Delete all subscriptions?")){
+data = [];
+save();
+renderTable();
+showToast("All data cleared");
+}
+}
+
+function saveBudget(){
+let value = Number(document.getElementById("budgetInput").value);
+if(value <= 0){
+alert("Enter a valid budget.");
+return;
+}
+localStorage.setItem("trackerBudget", value);
+renderTable();
+showToast("Budget updated 💰");
+}
+
+function editBudget(){
+let input = document.getElementById("budgetInput");
+input.value = localStorage.getItem("trackerBudget") || 3000;
+input.focus();
+}
+
+function runAdvisor(){
+let active = data.filter(x => x.status === "Active");
+let monthly = active.reduce((sum,x) => sum + Number(x.cost), 0);
+let highest = [...active].sort((a,b) => b.cost - a.cost)[0];
+let cancelled = data.filter(x => x.status === "Cancelled").reduce((sum,x) => sum + Number(x.cost)*12, 0);
+
+document.getElementById("advisorList").innerHTML = `
+<li>You spend <strong>${money(monthly)}</strong> per month.</li>
+<li>Your highest plan is <strong>${highest ? escapeHTML(highest.name) : "none"}</strong>.</li>
+<li>You could save <strong>${money(cancelled)}</strong> per year from cancelled plans.</li>
+<li>${monthly > 3000 ? "Consider reviewing expensive subscriptions." : "Your recurring spending is under control."}</li>
+`;
+showToast("AI analysis updated 🤖");
+}
+
+function scrollToSection(id){
+let element = document.getElementById(id);
+if(element){
+element.scrollIntoView({ behavior: "smooth" });
+}
+}
+
+function escapeHTML(value){
+return String(value)
+.replace(/&/g, "&amp;")
+.replace(/</g, "&lt;")
+.replace(/>/g, "&gt;")
+.replace(/"/g, "&quot;")
+.replace(/'/g, "&#039;");
+}
+
+/* =========================
+INITIALIZE
+========================= */
+
+renderTable();
+runAdvisor();
+checkAndSendNotifications();
+
+</script>
+
+</body>
+</html>
